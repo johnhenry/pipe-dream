@@ -32,7 +32,7 @@ Data can be imported and sent to standard output.
 pipe-dream module [path to pushy module]
 ```
 
-'Push modules' export an object with a message event.
+'Push modules' an event dispatcher that dispatches a message event. 
 The message be sent to standard output.
 
 #####Example
@@ -40,14 +40,16 @@ The following example displays sends the current date to standard the output str
 
 ```javascript
 //file:///example/module/push/random-time.js
-let messageFunc;
-const on = (event, func) => messageFunc = func;
-const interrupt = () => {
-  if(messageFunc) messageFunc(new Date() + '\n');
-  setTimeout(interrupt, Math.random() * 2000 + 500);
-};
-interrupt();
-module.exports = {on};
+module.exports = () => {
+  let messageFunc;
+  const addEventListener = (event, func) => messageFunc = func;
+  const interrupt = () => {
+    if(messageFunc) messageFunc(new Date() + '\n');
+    setTimeout(interrupt, Math.random() * 2000 + 500);
+  };
+  interrupt();
+  return {addEventListener};
+}
 ```
 
 ```bash

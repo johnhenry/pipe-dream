@@ -47,21 +47,23 @@ exports.handler = function (argv) {
             source = require(src);
           }
         }catch(error){}
-        if(source){
-          const unwrapWrap = (line) => {
-            if(argv.unwrap){
-              line = JSON.stringify(JSON.parse(line)[argv.unwrap]);
+        try{
+          const emitter = source();
+          if(emitter){
+            const unwrapWrap = (line) => {
+              if(argv.unwrap){
+                line = JSON.stringify(JSON.parse(line)[argv.unwrap]);
+              }
+              if(argv.wrap){
+                line = JSON.stringify({[argv.wrap]:line});
+              }
+              return line;
             }
-            if(argv.wrap){
-              line = JSON.stringify({[argv.wrap]:line});
-            }
-            return line;
+            emitter.addEventListener(
+              'message',
+              line => process.stdout.write(unwrapWrap(line)));
           }
-          source.on(
-            'message',
-            line => process.stdout.write(unwrapWrap(line)));
-        }
-
+        }catch(error){}
       })
       if(argv.pull){
         create_pull(argv, process);
