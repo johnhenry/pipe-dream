@@ -39,7 +39,7 @@ The message be sent to standard output.
 The following example displays sends the current date to standard the output stream every 0.5 to 2.0 seconds
 
 ```javascript
-//push/random-time.js
+//file:///example/module/push/random-time.js
 let messageFunc;
 const on = (event, func) => messageFunc = func;
 const interrupt = () => {
@@ -51,7 +51,7 @@ module.exports = {on};
 ```
 
 ```bash
-pipe-dream module push/random-time.js
+pipe-dream module example/module/push/random-time.js
   Sun Jun 05 2016 12:51:37 GMT-0700 (PDT)
   Sun Jun 05 2016 12:51:39 GMT-0700 (PDT)
   Sun Jun 05 2016 12:51:40 GMT-0700 (PDT)
@@ -78,12 +78,12 @@ If this command is the first in a series of commands, it will read input typed i
 The following example accepts user input and evaluates it
 
 ```javascript
-//pull/js-eval.js
+//file:///example/module/pull/js-eval.js
 module.exports = (input) => JSON.stringify({input, output:eval(input)});
 ```
 
 ```bash
-pipe-dream module -p pull/js-eval.js
+pipe-dream module -p example/module/pull/js-eval.js
 1
 {"input":"1", output:"1"}
 1+1
@@ -100,7 +100,7 @@ then extracts the title of the page from the response, and finally prompts the u
 
 
 ```javascript
-//pull/google-query.js
+//file:///example/module/pull/google-query.js
 const fetch = require('node-fetch');
 module.exports = (query)=>fetch(`https://www.google.com/search?q=${query}`)
   .then(response=>response.text())
@@ -108,7 +108,7 @@ module.exports = (query)=>fetch(`https://www.google.com/search?q=${query}`)
 ```
 
 ```javascript
-//pull/parse-title.js
+//file:///example/module/pull/parse-title.js
 const cheerio = require('cheerio');
 module.exports = (response)=>{
   try{
@@ -122,14 +122,14 @@ module.exports = (response)=>{
 ```
 
 ```javascript
-//pull/prompt-next.js
+//file:///example/module/pull/prompt-next.js
 module.exports = (input) => input + '\nnext?\n';
 ```
 
 ```bash
-pipe-dream module -p pull/google-query.js \
-  | pipe-dream module -p pull/extract-title.js -u title \   
-  | pipe-dream module -p pull/prompt-next.js
+pipe-dream module -p example/module/pull/google-query.js \
+  | pipe-dream module -p example/module/pull/extract-title.js -u title \   
+  | pipe-dream module -p example/module/pull/prompt-next.js
 ```
 
 ####Redirection
@@ -140,6 +140,8 @@ You can take advantage of standard unix redirection to create a fully modular ap
 In addition to displaying expected output, the following command will write successful responses and errors to files "success.log" and "error.log" respectively.
 
 ```bash
-pipe-dream module -p pull/js-eval.js -u output 1> >(>> success.log) 2> >(>> error.log) \
+pipe-dream module -p example/module/pull/js-eval.js -u output \
+  1> >(>> success.log) \
+  2> >(>> error.log) \
   | cat
 ```
