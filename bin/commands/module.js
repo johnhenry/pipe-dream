@@ -36,7 +36,7 @@ exports.handler = function (argv) {
   switch(argv.type){
     default:
     case 'commonjs':
-      const create_pull = require('./create-pull');
+      const create_pull = require('./module/create-pull');
       argv.source.forEach( src => {
         let source;
         try{
