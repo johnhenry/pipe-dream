@@ -7,10 +7,20 @@ exports.builder = {
     desc:'Pull',
     default:false
   },
+  init : {
+    alias:'i',
+    desc:'initial',
+    default:{}
+  },
   delimiter : {
     alias:'d',
     desc:'Delimiter',
     default:'\n'
+  },
+  nldj : {
+    alias:'j',
+    desc:'Newline Delimited Json',
+    default:false
   },
   wrap : {
     alias:'w',
@@ -48,7 +58,7 @@ exports.handler = function (argv) {
           }
         }catch(error){}
         try{
-          const emitter = source();
+          const emitter = source(argv.init);
           if(emitter){
             const unwrapWrap = (line) => {
               if(argv.unwrap){

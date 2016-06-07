@@ -15,7 +15,9 @@ module.exports = (argv, process)=>{
   }
   if(!transform) return false;
   let splitchar;
-  if(argv['eval-delimiter']){
+  if(argv.nldj){
+      splitchar = JSON.parse
+  }else if(argv['eval-delimiter']){
     splitchar = eval(argv.delimiter);
   }else if(argv.delimiter){
     splitchar  = argv.delimiter;
@@ -25,7 +27,8 @@ module.exports = (argv, process)=>{
     process.stderr.write(String(error));
     process.stderr.write('\n');
   }
-  const handle = (line) => {
+  const handle = (stdin) => {
+    const line = Object.assign({stdin}, argv.init);
     try{
       Promise.resolve(transform(line))
       .then((line) => {

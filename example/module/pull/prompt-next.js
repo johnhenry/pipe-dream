@@ -1,1 +1,1 @@
-module.exports = (input) => input + '\nnext?\n';
+module.exports = (input) => input.stdin + '\nnext?\n';
