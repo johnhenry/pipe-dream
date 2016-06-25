@@ -1,6 +1,6 @@
 {
   "name": "pipe-dreams",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "bin": {
     "pipe-dream": "./bin/index.js"
@@ -19,5 +19,5 @@
     "split": "^1.0.0",
     "yargs": "^4.7.1"
   },
-  "repository":"https://github.com/johnhenry/pipe-dreams"
+  "repository": "https://github.com/johnhenry/pipe-dreams"
 }
