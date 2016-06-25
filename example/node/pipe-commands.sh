@@ -2,4 +2,4 @@ alias duckduckgo-query='pipe-dream node example/node/pull/query.js --init.search
 alias google-query='pipe-dream node example/node/pull/query.js --init.search="https://www.google.com/search?q="'
 alias extract-title='pipe-dream node example/node/pull/extract-title.js -u title'
 alias prompt-next='pipe-dream node example/node/pull/prompt-next.js'
-alias search='duckduckgo-query | extract-title | prompt-next'
+alias search='duckduckgo-query'

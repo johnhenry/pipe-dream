@@ -6,11 +6,18 @@ String them together using standard unix methods such as
 You must install node [and npm] before using.
 
 ##Installation
+###npm
 Install using npm
 
 ```bash
 #!/bin/bash
 npm install --save pipe-dream
+```
+
+###docker
+```
+git clone
+bash Dockerinit
 ```
 
 ##Usage

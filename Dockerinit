@@ -1,0 +1,2 @@
+docker build -t pipe-dream .
+alias pipe-dream='docker run -it pipe-dream ./bin/index.js'

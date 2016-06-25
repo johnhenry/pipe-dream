@@ -1,5 +1,5 @@
 {
-  "name": "pipe-dream",
+  "name": "pipe-dreams",
   "version": "0.0.1",
   "description": "",
   "bin": {
@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "post-install": "bash init-hooks.sh"
+    "post-install": "bash init-hooks"
   },
   "author": "",
   "license": "ISC",
@@ -18,5 +18,6 @@
   "dependencies": {
     "split": "^1.0.0",
     "yargs": "^4.7.1"
-  }
+  },
+  "repository":"https://github.com/johnhenry/pipe-dreams"
 }
