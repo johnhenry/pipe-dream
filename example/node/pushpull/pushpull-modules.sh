@@ -1,1 +1,1 @@
-alias push-pull='pipe-dreams module example/module/pushpull/pushpull.js'
+alias push-pull='pipe-dreams node example/node/pushpull/pushpull.js'
