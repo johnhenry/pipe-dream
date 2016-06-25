@@ -1,1 +1,1 @@
-alias random-time='pipe-dream node example/node/push/random-time.js'
+alias random-time='pipe-dreams node example/node/push/random-time.js'

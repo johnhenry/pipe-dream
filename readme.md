@@ -11,19 +11,24 @@ Install using npm
 
 ```bash
 #!/bin/bash
-npm install --save pipe-dream
+npm install -g pipe-dreams
 ```
 
 ###docker
-```
-git clone
-bash Dockerinit
+Install with docker (experimental)
+
+```bash
+#!/bin/bash
+git clone git@github.com:johnhenry/pipe-dreams.git
+cd pipe-dreams
+docker build -t pipe-dreams .
+alias pipe-dreams='docker run -it pipe-dreams ./bin/index.js'
 ```
 
 ##Usage
 ```bash
 #!/bin/bash
-pipe-dream [command]
+pipe-dreams [command]
 ```
 
 ##Commands
@@ -33,7 +38,7 @@ Pipe Data through node modules
 
 ```bash
 #!/bin/bash
-pipe-dream node [options]
+pipe-dreams node [options]
 ```
 
 ####Push modules
@@ -41,7 +46,7 @@ Data can be fead from a module into standard output.
 
 ```bash
 #!/bin/bash
-pipe-dream node [path to module]
+pipe-dreams node [path to module]
 ```
 
 A push module takes an init object and exports an event dispatcher that dispatches a 'message' event.
@@ -65,7 +70,7 @@ module.exports = () => {
 
 ```bash
 #file:///example/node/push/push-modules.sh
-alias random-time='pipe-dream node example/node/push/random-time.js'
+alias random-time='pipe-dreams node example/node/push/random-time.js'
 ```
 
 ```bash
@@ -90,7 +95,7 @@ Data can be transformed and sent to standard output.
 
 ```bash
 #!/bin/bash
-pipe-dream node [path to transformation module]
+pipe-dreams node [path to transformation module]
 ```
 
 A pull module takes an init object and exports function. This function may  either a flat object or a promise to be unwrapped.
@@ -107,7 +112,7 @@ module.exports = (init) => (input) => JSON.stringify({input:input.stdin, output:
 
 ```bash
 #file:///example/node/pull/pull-modules.sh
-alias js-eval='pipe-dream node example/node/pull/js-eval.js'
+alias js-eval='pipe-dreams node example/node/pull/js-eval.js'
 ```
 
 ```bash
@@ -141,7 +146,7 @@ module.exports = (init) => {
 
 ```bash
 #file:///example/node/pushpull/pushpull-modules.sh
-alias push-pull='pipe-dream node example/node/pushpull/pushpull.js'
+alias push-pull='pipe-dreams node example/node/pushpull/pushpull.js'
 ```
 
 ```bash
@@ -196,10 +201,10 @@ module.exports = (init) => (input) => input.stdin + '\nnext?\n';
 
 ```bash
 #file:///example/node/pipe-commands.sh
-alias duckduckgo-query='pipe-dream node example/node/pull/query.js --init.search="https://duckduckgo.com/?q="'
-alias google-query='pipe-dream node example/node/pull/query.js --init.search="https://www.google.com/search?q="'
-alias extract-title='pipe-dream node example/node/pull/extract-title.js -u title'
-alias prompt-next='pipe-dream node example/node/pull/prompt-next.js'
+alias duckduckgo-query='pipe-dreams node example/node/pull/query.js --init.search="https://duckduckgo.com/?q="'
+alias google-query='pipe-dreams node example/node/pull/query.js --init.search="https://www.google.com/search?q="'
+alias extract-title='pipe-dreams node example/node/pull/extract-title.js -u title'
+alias prompt-next='pipe-dreams node example/node/pull/prompt-next.js'
 alias search='duckduckgo-query | extract-title | prompt-next'
 ```
 

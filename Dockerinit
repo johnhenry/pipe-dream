@@ -1,2 +1,2 @@
-docker build -t pipe-dream .
-alias pipe-dream='docker run -it pipe-dream ./bin/index.js'
+docker build -t pipe-dreams .
+alias pipe-dreams='docker run -it pipe-dreams ./bin/index.js'

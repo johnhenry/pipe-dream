@@ -1,1 +1,1 @@
-alias js-eval='pipe-dream node example/node/pull/js-eval.js'
+alias js-eval='pipe-dreams node example/node/pull/js-eval.js'
