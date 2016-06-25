@@ -1,6 +1,6 @@
 {
   "name": "pipe-dreams",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "bin": {
     "pipe-dreams": "./bin/index.js"
@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "post-install": "bash init-hooks",
-    "github":"git push --follow-tags origin HEAD"
+    "github": "git push --follow-tags origin HEAD"
   },
   "author": "",
   "license": "ISC",
