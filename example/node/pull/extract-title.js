@@ -1,5 +1,5 @@
 const cheerio = require('cheerio');
-module.exports = (response)=>{
+module.exports = (init) => (response)=>{
   try{
     const $ = cheerio.load(JSON.parse(response.stdin).body);
     const title = $('title').html();

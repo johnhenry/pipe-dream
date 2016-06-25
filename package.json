@@ -6,7 +6,8 @@
     "pipe-dream": "./bin/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "post-install":"bash init-hooks.sh"
   },
   "author": "",
   "license": "ISC",

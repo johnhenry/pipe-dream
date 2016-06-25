@@ -3,8 +3,7 @@ const path = require('path');
 const pkg = require(path.join(__dirname, '../package.json'));
 var argv = require('yargs')
   .version(pkg.version)
-  .command('module [source...]', 'module', require('./commands/module'))
-  .command('container [source...]', 'container', require('./commands/container'))
+  .command('node [source...]', 'node', require('./commands/node'))
   //Help
   .help()
   .showHelpOnFail()

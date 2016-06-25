@@ -1,5 +1,6 @@
 #Pipe Dreams
-Seamlessly use node modules alongside standard unix utilities.
+Create pipeable commands
+String them together using standard unix methods such as
 
 ##Pre-Requesites
 You must install node [and npm] before using.
@@ -8,38 +9,41 @@ You must install node [and npm] before using.
 Install using npm
 
 ```bash
+#!/bin/bash
 npm install --save pipe-dream
 ```
 
 ##Usage
 ```bash
-pipe-dream <command>
+#!/bin/bash
+pipe-dream [command]
 ```
 
 ##Commands
 
-###module
+###node
 Pipe Data through node modules
 
 ```bash
-pipe-dream module [options]
+#!/bin/bash
+pipe-dream node [options]
 ```
 
 ####Push modules
-Data can be imported and sent to standard output.
+Data can be fead from a module into standard output.
 
 ```bash
-pipe-dream module [path to pushy module]
+#!/bin/bash
+pipe-dream node [path to module]
 ```
 
-'Push modules' an event dispatcher that dispatches a message event.
-The message be sent to standard output.
+A push module takes an init object and exports an event dispatcher that dispatches a 'message' event.
 
 #####Example
 The following example displays sends the current date to standard the output stream every 0.5 to 2.0 seconds
 
 ```javascript
-//file:///example/module/push/random-message.js
+//file:///example/node/push/random-time.js
 module.exports = () => {
   let messageFunc;
   const addEventListener = (event, func) => messageFunc = func;
@@ -53,16 +57,18 @@ module.exports = () => {
 ```
 
 ```bash
-#file:///example/module/push/push-modules.sh
-alias random-message='pipe-dream module example/module/push/random-message.js'
+#file:///example/node/push/push-modules.sh
+alias random-time='pipe-dream node example/node/push/random-time.js'
 ```
 
 ```bash
-source example/module/push/push-modules.sh
+#!/bin/bash
+source example/node/push/push-modules.sh
 ```
 
 ```bash
-random-message
+#!/bin/bash
+random-time
   Sun Jun 05 2016 12:51:37 GMT-0700 (PDT)
   Sun Jun 05 2016 12:51:39 GMT-0700 (PDT)
   Sun Jun 05 2016 12:51:40 GMT-0700 (PDT)
@@ -74,14 +80,13 @@ random-message
 
 ####Pull modules
 Data can be transformed and sent to standard output.
-Include the "pull" flag to denote the transformation module.
-Use "p" as an alias for "pull".
 
 ```bash
-pipe-dream module --pull [path to transformation module]
+#!/bin/bash
+pipe-dream node [path to transformation module]
 ```
 
-Pull modules export a function which may return a promise for asynchronicity.
+A pull module takes an init object and exports function. This function may  either a flat object or a promise to be unwrapped.
 
 If this command is the first in a series of commands, it will read input typed into the command line.
 
@@ -89,20 +94,22 @@ If this command is the first in a series of commands, it will read input typed i
 The following example accepts user input and evaluates it
 
 ```javascript
-//file:///example/module/pull/js-eval.js
-module.exports = (input) => JSON.stringify({input, output:eval(input)});
+//file:///example/node/pull/js-eval.js
+module.exports = (init) => (input) => JSON.stringify({input:input.stdin, output:eval(input.stdin)});
 ```
 
 ```bash
-#file:///example/module/pull/pull-modules.sh
-alias js-eval='pipe-dream module -p example/module/pull/js-eval.js'
+#file:///example/node/pull/pull-modules.sh
+alias js-eval='pipe-dream node example/node/pull/js-eval.js'
 ```
 
 ```bash
-source example/module/pull/pull-modules.sh
+#!/bin/bash
+source example/node/pull/pull-modules.sh
 ```
 
 ```bash
+#!/bin/bash
 js-eval
 >1
 {"input":"1", output:"1"}
@@ -110,29 +117,63 @@ js-eval
 {"input":"1+1", output:"2"}
 ```
 
+####Dual modules
+Modules can function as both push and pull modules.
+
+#####Example
+The following combines a push and a pull module into one.
+
+```javascript
+//file:///example/node/pushpull/pushpull.js
+module.exports = (init) => {
+  return Object.assign(
+    require('../pull/js-eval')(init),
+    require('../push/random-time')(init));
+};
+```
+
+```bash
+#file:///example/node/pushpull/pushpull-modules.sh
+alias push-pull='pipe-dream node example/node/pushpull/pushpull.js'
+```
+
+```bash
+#!/bin/bash
+source example/node/pushpull/pushpull-modules.sh
+```
+
+```bash
+#!/bin/bash
+push-pull
+>1
+{"input":"1", output:"1"}
+>1+1
+{"input":"1+1", output:"2"}
+```
+
 ####Pipe Commands
-commands can be piped into one another
+Commands can be piped into one another
 
 #####Example
 
-The folowing example first sends the users's input to google,
+The following example first sends the users's input to google,
 then extracts the title of the page from the response, and finally prompts the user for more input.
 
 
 ```javascript
-//file:///example/module/pull/google-query.js
+//file:///example/node/pull/query.js
 const fetch = require('node-fetch');
-module.exports = (query)=>fetch(`https://www.google.com/search?q=${query}`)
+module.exports = (init) => (query) => fetch(`${query.search}${query.stdin}`)
   .then(response=>response.text())
   .then(body=>JSON.stringify({body}));
 ```
 
 ```javascript
-//file:///example/module/pull/parse-title.js
+//file:///example/node/pull/extract-title.js
 const cheerio = require('cheerio');
-module.exports = (response)=>{
+module.exports = (init) => (response)=>{
   try{
-    const $ = cheerio.load(JSON.parse(response).body);
+    const $ = cheerio.load(JSON.parse(response.stdin).body);
     const title = $('title').html();
     return Promise.resolve(JSON.stringify({title}));
   }catch(error){
@@ -142,29 +183,28 @@ module.exports = (response)=>{
 ```
 
 ```javascript
-//file:///example/module/pull/prompt-next.js
-module.exports = (input) => input + '\nnext?\n';
+//file:///example/node/pull/prompt-next.js
+module.exports = (init) => (input) => input.stdin + '\nnext?\n';
 ```
 
 ```bash
-#file:///example/module/pipe-commands.sh
-alias duckduckgo-query='pipe-dream module -p example/module/pull/query.js --init.search="https://duckduckgo.com/?q="'
-alias extract-title='pipe-dream module -p example/module/pull/extract-title.js -u title'
-alias prompt-next='pipe-dream module -p example/module/pull/prompt-next.js'
+#file:///example/node/pipe-commands.sh
+alias duckduckgo-query='pipe-dream node example/node/pull/query.js --init.search="https://duckduckgo.com/?q="'
+alias google-query='pipe-dream node example/node/pull/query.js --init.search="https://www.google.com/search?q="'
+alias extract-title='pipe-dream node example/node/pull/extract-title.js -u title'
+alias prompt-next='pipe-dream node example/node/pull/prompt-next.js'
 alias search='duckduckgo-query | extract-title | prompt-next'
 ```
 
 ```bash
-source example/module/pipe-commands.sh
+#!/bin/bash
+source example/node/pipe-commands.sh
 ```
 
 ```bash
+#!/bin/bash
 search
 ```
-
-alias google-query='pipe-dream module -p example/module/pull/query.js --init.search="https://www.google.com/search?q="'
-
-https://duckduckgo.com/?q=
 
 ####Redirection
 You can take advantage of standard unix redirection to create a fully modular application,
@@ -174,19 +214,18 @@ You can take advantage of standard unix redirection to create a fully modular ap
 In addition to displaying expected output, the following command will write successful responses and errors to files "success.log" and "error.log" respectively.
 
 ```bash
-#file:///example/module/redirection.sh
+#file:///example/node/redirection.sh
+source example/node/pull/pull-modules.sh &&
 alias calculator='js-eval \
   1> >(>> success.log) 2> >(>> error.log) \
   | cat'
 ```
 
 ```bash
-source example/module/redirection.sh
+source example/node/redirection.sh
 ```
 
 ```bash
+#!/bin/bash
 calculator
 ```
-
-###containers
-coming soon...

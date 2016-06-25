@@ -1,19 +1,5 @@
 const path = require('path');
-module.exports = (argv, process)=>{
-  let transform;
-  if(argv.pull === true){
-    transform = _=>_;
-  }else{
-    try{
-      transform = require(path.join(process.cwd(), argv.pull));
-    }catch(error){}
-    try{
-      if(!transform){
-        transform = require(argv.pull);
-      }
-    }catch(error){}
-  }
-  if(!transform) return false;
+module.exports = (argv, process, transform)=>{
   let splitchar;
   if(argv.nldj){
       splitchar = JSON.parse
