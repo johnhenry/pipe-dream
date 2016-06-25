@@ -3,11 +3,12 @@
   "version": "0.0.2",
   "description": "",
   "bin": {
-    "pipe-dream": "./bin/index.js"
+    "pipe-dreams": "./bin/index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "post-install": "bash init-hooks"
+    "post-install": "bash init-hooks",
+    "github":"git push --follow-tags origin HEAD"
   },
   "author": "",
   "license": "ISC",
