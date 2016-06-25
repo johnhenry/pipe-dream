@@ -1,6 +1,6 @@
 {
   "name": "pipe-dreams",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "bin": {
     "pipe-dreams": "./bin/index.js"
