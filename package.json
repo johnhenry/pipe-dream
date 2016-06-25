@@ -8,7 +8,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "post-install": "bash init-hooks",
-    "github": "git push --follow-tags origin HEAD"
+    "github": "git push --all origin"
   },
   "author": "",
   "license": "ISC",
